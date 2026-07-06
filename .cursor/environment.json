@@ -1,0 +1,15 @@
+{
+  "build": {
+    "dockerfile": "Dockerfile",
+    "context": ".."
+  },
+  "install": "bash .cursor/cloud-agent-install.sh",
+  "start": "bash .cursor/cloud-agent-start.sh",
+  "terminals": [
+    {
+      "name": "Streamlit app",
+      "command": "streamlit run app.py --server.address 0.0.0.0 --server.port 8501",
+      "ports": [8501]
+    }
+  ]
+}
