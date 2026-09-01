@@ -56,3 +56,46 @@ def rsi_mean_reversion_signal(
 
     return signal
 
+
+def ema_crossover_signal(close: pd.Series, fast_span: int, slow_span: int) -> pd.Series:
+    """Long-only EMA crossover signal: 1 when fast EMA > slow EMA else 0."""
+    if fast_span >= slow_span:
+        raise ValueError("fast_span must be smaller than slow_span")
+
+    fast_ema = close.ewm(span=fast_span, adjust=False, min_periods=fast_span).mean()
+    slow_ema = close.ewm(span=slow_span, adjust=False, min_periods=slow_span).mean()
+    signal = (fast_ema > slow_ema).astype(float).fillna(0.0)
+    return signal.rename("signal")
+
+
+def bollinger_mean_reversion_signal(
+    close: pd.Series,
+    window: int = 20,
+    num_std: float = 2.0,
+) -> pd.Series:
+    """Long-only Bollinger mean-reversion signal.
+
+    Rules:
+    - Enter long when close < lower band.
+    - Exit to flat when close > middle band.
+    """
+    if window < 2:
+        raise ValueError("window must be at least 2")
+    if num_std <= 0:
+        raise ValueError("num_std must be positive")
+
+    middle = close.rolling(window=window, min_periods=window).mean()
+    std = close.rolling(window=window, min_periods=window).std(ddof=0)
+    lower = middle - (num_std * std)
+
+    signal = pd.Series(0.0, index=close.index, name="signal")
+    in_position = False
+    for idx in close.index:
+        price = close.loc[idx]
+        if not in_position and price < lower.loc[idx]:
+            in_position = True
+        elif in_position and price > middle.loc[idx]:
+            in_position = False
+        signal.loc[idx] = 1.0 if in_position else 0.0
+    return signal
+

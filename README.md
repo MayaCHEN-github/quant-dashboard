@@ -1,6 +1,6 @@
 # mini-quant-backtester
 
-An AI-assisted lightweight quantitative research dashboard for testing technical trading strategies on historical market data.  
+A lightweight quantitative research dashboard for testing technical trading strategies on historical market data.  
 It implements a vectorized backtesting engine, risk-adjusted performance metrics, transaction cost simulation, and interactive Streamlit visualizations.
 
 ## Why this project
@@ -9,15 +9,15 @@ It implements a vectorized backtesting engine, risk-adjusted performance metrics
 - 策略实现（SMA / RSI）
 - 向量化回测（含手续费/滑点）
 - 绩效指标与可视化
-- AI Review Prompt（复盘与改进建议）
+- 规则驱动的本地学习总结
 
 ## MVP Features
 1. 输入股票代码、日期范围、初始资金、手续费、滑点  
 2. 下载 OHLCV 历史数据  
-3. 两种策略：SMA Crossover、RSI Mean Reversion  
+3. 四种策略：SMA Crossover、EMA Crossover、RSI Mean Reversion、Bollinger Mean Reversion  
 4. 指标：总收益、年化收益、Sharpe、最大回撤、胜率、交易次数  
 5. 图表：价格+买卖点、权益曲线、回撤曲线、交易日志  
-6. AI Review：自动生成可复制到任意 LLM 的复盘 Prompt  
+6. 本地学习总结：根据回测指标给出规则驱动的复盘提示  
 
 ## Project Structure
 ```
